@@ -17,6 +17,7 @@ import javafx.stage.*;
  * @authors Lexi Diep, 
  */
 
+// Test Commit - Shivan
 public class TextEditor extends Application {
     Button loadFileButton;
     Button saveFileButton;
@@ -64,7 +65,7 @@ public class TextEditor extends Application {
         loadFileButton = new Button("Process File");
         HBox loadPane = new HBox();
         loadPane.setAlignment(Pos.TOP_LEFT);
-        loadPane.setPadding(new Insets(3, 0, 0, 0));
+        loadPane.setPadding(new Insets(3, 0, 0, 0));;
         loadPane.getChildren().add(loadFileButton);
         
         
