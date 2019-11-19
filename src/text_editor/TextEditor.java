@@ -4,18 +4,12 @@ import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-import javafx.stage.FileChooser;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.*;
+import javafx.stage.*;
 
 
 /**
@@ -29,10 +23,8 @@ public class TextEditor extends Application {
     Button previewButton;
     Button errorsButton;
     Button exitButton;
-    //Button chooseFileButton;
     TextField openFileField;
     TextArea outputArea;
-    //FileChooser fileChooser;
     
     
     @Override
@@ -40,30 +32,47 @@ public class TextEditor extends Application {
         primaryStage.setTitle("Text Editor");
         
         
-        // Pane for choosing and loading the file
-        // text field and button should be centered
+        // Pane for containing openFileField
+        // should be centered and will be contained with save button
         openFileField = new TextField();
-        openFileField.setPrefWidth(200);
-        loadFileButton = new Button("Process File");
-        //chooseFileButton = new Button("Choose File");
-        HBox loadPane = new HBox();
-        loadPane.setAlignment(Pos.CENTER);
-        loadPane.getChildren().addAll(openFileField, loadFileButton);
+        openFileField.setPrefWidth(250);
+        HBox fileFieldPane = new HBox();
+        fileFieldPane.setAlignment(Pos.CENTER);
+        fileFieldPane.setPadding(new Insets(0, 0, 3, 0));
+        fileFieldPane.getChildren().add(openFileField);
         
         
         // Pane for containing save button
         // button should be centered
         saveFileButton = new Button("Save Changes");
+        saveFileButton.setPrefHeight(35);
         HBox savePane = new HBox();
         savePane.setAlignment(Pos.CENTER);
+        savePane.setPadding(new Insets(0, 0, 4, 18));
         savePane.getChildren().add(saveFileButton);
         
         
         // Pane for containing loadPane and savePane
         // both panes should be centered
-        VBox topPane = new VBox();
-        topPane.getChildren().addAll(loadPane, savePane);
-
+        VBox topMidPane = new VBox();
+        topMidPane.setAlignment(Pos.CENTER);
+        topMidPane.setPadding(new Insets(3, 3, 0, 70));
+        topMidPane.getChildren().addAll(fileFieldPane, savePane);
+        
+        
+        // Pane for containing the load file button to be aligned with open file field
+        loadFileButton = new Button("Process File");
+        HBox loadPane = new HBox();
+        loadPane.setAlignment(Pos.TOP_LEFT);
+        loadPane.setPadding(new Insets(3, 0, 0, 0));
+        loadPane.getChildren().add(loadFileButton);
+        
+        
+        // Pane for top border of root pane
+        HBox topPane = new HBox();
+        topPane.setAlignment(Pos.CENTER);
+        topPane.getChildren().addAll(topMidPane, loadPane);
+        
         
         // Pane to enable scroll in text area
         outputArea = new TextArea();
@@ -74,13 +83,26 @@ public class TextEditor extends Application {
         centerPane.setFitToHeight(true);
         
         
-        // Pane for containing preview and error buttons
-        // buttons should be centered
+        // Pane for containing preview button alignment with error pane
         previewButton = new Button("Preview Processed File");
+        previewButton.setPrefHeight(35);
+        HBox preview = new HBox();
+        preview.setPadding(new Insets(0, 3, 0, 0));
+        preview.getChildren().add(previewButton);
+
+        
+        // Pane for containing error button alignment with preview pane
         errorsButton = new Button("Display Error Log");
+        errorsButton.setPrefHeight(35);
+        HBox errorsPane = new HBox();
+        errorsPane.getChildren().add(errorsButton);
+        
+        
+        // Pane for containing preveiew and errors pane bottom border of root pane
         HBox bottomPane = new HBox();
         bottomPane.setAlignment(Pos.CENTER);
-        bottomPane.getChildren().addAll(previewButton, errorsButton);
+        bottomPane.setPadding(new Insets(4, 25, 5, 0));
+        bottomPane.getChildren().addAll(preview, errorsPane);
         
         
         // Pane for containing all panes
@@ -88,7 +110,12 @@ public class TextEditor extends Application {
         rootPane.setTop(topPane);
         rootPane.setCenter(centerPane);
         rootPane.setBottom(bottomPane);
+        BackgroundFill backgroundColor = new BackgroundFill(Color.STEELBLUE, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(backgroundColor);
+        rootPane.setBackground(background);
         
+        
+        // setting the scene and stage
         Scene scene = new Scene(rootPane, 850, 550);
         primaryStage.setScene(scene);
         primaryStage.show();
