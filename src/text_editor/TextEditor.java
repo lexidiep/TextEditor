@@ -17,7 +17,7 @@ import javafx.stage.*;
  * @authors Lexi Diep, 
  */
 
-// Test Commit - Shivan
+
 public class TextEditor extends Application {
     Button loadFileButton;
     Button saveFileButton;
