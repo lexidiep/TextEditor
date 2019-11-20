@@ -14,7 +14,7 @@ import javafx.stage.*;
 
 /**
  *
- * @authors Lexi Diep, 
+ * @authors Lexi Diep, Shivan Sareen
  */
 // Test Commit - Shivan
 
