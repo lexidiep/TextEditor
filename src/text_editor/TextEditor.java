@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.scene.text.FontWeight;
+import javafx.stage.*;
 import javafx.stage.*;
 
 
@@ -18,7 +20,7 @@ import javafx.stage.*;
  */
 
 
-public class TextEditor extends Application {
+public class TextEditor extends Application implements EventHandler<ActionEvent>{
     private Button loadFileButton;
     private Button saveFileButton;
     private Button previewButton;
@@ -45,6 +47,7 @@ public class TextEditor extends Application {
         // Pane for containing save button
         // button should be centered
         saveFileButton = new Button("Save Changes");
+        saveFileButton.setOnAction(this);
         saveFileButton.setPrefHeight(35);
         saveFileButton.setTextFill(Color.WHITE);
         BackgroundFill fill = new BackgroundFill(Color.CORNFLOWERBLUE, new CornerRadii(5), Insets.EMPTY);
@@ -66,6 +69,7 @@ public class TextEditor extends Application {
         
         // Pane for containing the load file button to be aligned with open file field
         loadFileButton = new Button("Process File");
+        loadFileButton.setOnAction(this);
         loadFileButton.setTextFill(Color.WHITE);
         BackgroundFill loadFill = new BackgroundFill(Color.web("#4CAF50"), new CornerRadii(5), Insets.EMPTY);
         Background loadBG = new Background(loadFill);
@@ -85,6 +89,8 @@ public class TextEditor extends Application {
         // Pane to enable scroll in text area
         outputArea = new TextArea();
         outputArea.setEditable(false);
+        outputArea.setText("NO FILE HAS BEEN PROCESSED");
+        outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
         ScrollPane centerPane = new ScrollPane();
         centerPane.setContent(outputArea);
         centerPane.setFitToWidth(true);
@@ -93,6 +99,7 @@ public class TextEditor extends Application {
         
         // Pane for containing preview button alignment with error pane
         previewButton = new Button("Preview Processed File");
+        previewButton.setOnAction(this);
         previewButton.setPrefHeight(35);
         HBox preview = new HBox();
         preview.setPadding(new Insets(0, 3, 0, 0));
@@ -101,6 +108,7 @@ public class TextEditor extends Application {
         
         // Pane for containing error button alignment with preview pane
         errorsButton = new Button("Display Error Log");
+        errorsButton.setOnAction(this);
         errorsButton.setPrefHeight(35);
         HBox errorsPane = new HBox();
         errorsPane.getChildren().add(errorsButton);
@@ -134,6 +142,31 @@ public class TextEditor extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    
+        /*------------------------------------ACTION EVENTS-----------------------------------------------------------*/
+
+    @Override
+    public void handle(ActionEvent event) {
+        // Action for when process file button is pressed
+        if (event.getSource() == loadFileButton) {
+                String test = openFileField.getText();
+                outputArea.setText(test);
+                outputArea.setStyle("-fx-text-inner-color: black;");
+        }
+        // Action for when save changes button is pressed
+        else if (event.getSource() == saveFileButton) {
+            
+        }
+        // Action for when preview processed file button is pressed
+        else if (event.getSource() == previewButton) {
+            
+        }
+        // Action for when display error log button is pressed
+        else if (event.getSource() == errorsButton) {
+            
+        }
     }
     
 }
