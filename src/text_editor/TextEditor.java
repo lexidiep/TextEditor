@@ -19,13 +19,12 @@ import javafx.stage.*;
 
 
 public class TextEditor extends Application {
-    Button loadFileButton;
-    Button saveFileButton;
-    Button previewButton;
-    Button errorsButton;
-    Button exitButton;
-    TextField openFileField;
-    TextArea outputArea;
+    private Button loadFileButton;
+    private Button saveFileButton;
+    private Button previewButton;
+    private Button errorsButton;
+    private TextField openFileField;
+    private TextArea outputArea;
     
     
     @Override
@@ -47,6 +46,10 @@ public class TextEditor extends Application {
         // button should be centered
         saveFileButton = new Button("Save Changes");
         saveFileButton.setPrefHeight(35);
+        saveFileButton.setTextFill(Color.WHITE);
+        BackgroundFill fill = new BackgroundFill(Color.CORNFLOWERBLUE, new CornerRadii(5), Insets.EMPTY);
+        Background saveBG = new Background(fill);
+        saveFileButton.setBackground(saveBG);
         HBox savePane = new HBox();
         savePane.setAlignment(Pos.CENTER);
         savePane.setPadding(new Insets(0, 0, 4, 18));
@@ -63,6 +66,10 @@ public class TextEditor extends Application {
         
         // Pane for containing the load file button to be aligned with open file field
         loadFileButton = new Button("Process File");
+        loadFileButton.setTextFill(Color.WHITE);
+        BackgroundFill loadFill = new BackgroundFill(Color.web("#4CAF50"), new CornerRadii(5), Insets.EMPTY);
+        Background loadBG = new Background(loadFill);
+        loadFileButton.setBackground(loadBG);
         HBox loadPane = new HBox();
         loadPane.setAlignment(Pos.TOP_LEFT);
         loadPane.setPadding(new Insets(3, 0, 0, 0));;
@@ -111,7 +118,7 @@ public class TextEditor extends Application {
         rootPane.setTop(topPane);
         rootPane.setCenter(centerPane);
         rootPane.setBottom(bottomPane);
-        BackgroundFill backgroundColor = new BackgroundFill(Color.STEELBLUE, CornerRadii.EMPTY, Insets.EMPTY);
+        BackgroundFill backgroundColor = new BackgroundFill(Color.web("#1F1B24"), new CornerRadii(5), Insets.EMPTY);
         Background background = new Background(backgroundColor);
         rootPane.setBackground(background);
         
