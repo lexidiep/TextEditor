@@ -1,5 +1,8 @@
 package text_editor;
 
+import java.io.*;
+import java.util.Scanner;
+import java.lang.*;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
@@ -149,20 +152,85 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
 
     @Override
     public void handle(ActionEvent event) {
+        String fileName = openFileField.getText();
+        String inputFileTest = "/Users/lexidiep/Desktop/" + fileName;
+        FileInputStream is = null;
+        BufferedReader bufferedReader = null;
+
+
         // Action for when process file button is pressed
         if (event.getSource() == loadFileButton) {
-                String test = openFileField.getText();
-                outputArea.setText(test);
-                outputArea.setStyle("-fx-text-inner-color: black;");
+                outputArea.clear();
+                try {
+                   bufferedReader = new BufferedReader(new FileReader(inputFileTest));
+                   outputArea.appendText("\"" + fileName + "\" HAS BEEN SUCCESSFULLY PROCESSED");
+                   outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
+                }
+                catch (java.io.FileNotFoundException e) {
+                    outputArea.appendText("\"" + fileName + "\" NOT FOUND");
+                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                }
+                catch (java.io.IOException e) {
+                    outputArea.appendText("Cannot access file");
+                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                }
+                finally {
+                    try {
+                        bufferedReader.close();
+                    }
+                    catch (java.io.IOException e) {
+                        outputArea.appendText("Cannot close file");
+                        outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                    }
+                }
         }
+        
         // Action for when save changes button is pressed
         else if (event.getSource() == saveFileButton) {
             
         }
+        
         // Action for when preview processed file button is pressed
         else if (event.getSource() == previewButton) {
-            
+            outputArea.clear();
+            outputArea.setStyle("-fx-txt-inner-color: black");
+            File file = new File(inputFileTest);
+            try {
+                int charCount = 0, count = 0;
+                String text;
+                Scanner scanner = new Scanner(file);
+                Scanner scanCount = new Scanner(file);
+                Scanner read = new Scanner(file);
+
+                
+                while (scanner.hasNext()) {
+                    if (charCount + scanner.next().length() <= 80) {
+                        charCount += scanCount.next().length() + 1;
+                        outputArea.appendText(read.next());
+                        outputArea.appendText(" ");
+                        count++;
+                    }
+                    else {
+                        charCount = 0;
+                        outputArea.appendText("\n");
+                        count = 0;
+                    }
+                }
+                
+                scanner.close();
+                scanCount.close();
+                read.close();
+            }
+            catch (java.io.FileNotFoundException e) {
+                  outputArea.appendText("\"" + fileName + "\" NOT FOUND");
+                  outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+            }
+            catch (java.io.IOException e) {
+                  outputArea.appendText("Cannot access file");
+                  outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+            }
         }
+        
         // Action for when display error log button is pressed
         else if (event.getSource() == errorsButton) {
             
