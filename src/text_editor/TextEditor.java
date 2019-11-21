@@ -154,17 +154,39 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
     public void handle(ActionEvent event) {
         String fileName = openFileField.getText();
         String inputFileTest = "/Users/lexidiep/Desktop/" + fileName;
-        FileInputStream is = null;
         BufferedReader bufferedReader = null;
 
-
-        // Action for when process file button is pressed
-        if (event.getSource() == loadFileButton) {
-                outputArea.clear();
+        try {
+            bufferedReader = new BufferedReader(new FileReader(inputFileTest));
+            File f = new File(inputFileTest);
+            
+            // Action for when process file button is pressed
+            if (event.getSource() == loadFileButton) {
+                if (f.exists()) {
+                    outputArea.clear();
+                    outputArea.appendText("\"" + fileName + "\" HAS BEEN SUCCESSFULLY PROCESSED");
+                    outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
+                }
+                else {
+                    throw new FileNotFoundException();
+                }
+            }
+        
+            // Action for when save changes button is pressed
+            else if (event.getSource() == saveFileButton) {
                 try {
-                   bufferedReader = new BufferedReader(new FileReader(inputFileTest));
-                   outputArea.appendText("\"" + fileName + "\" HAS BEEN SUCCESSFULLY PROCESSED");
-                   outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
+                    if (f.exists()) {
+                        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(inputFileTest));
+                        bufferedWriter.write(outputArea.getText());
+                        bufferedWriter.flush();
+                        bufferedWriter.close();
+                        outputArea.clear();
+                        outputArea.appendText("SAVED TO \"" + fileName + "\"");
+                        outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
+                    }
+                    else {
+                        throw new FileNotFoundException();
+                    }
                 }
                 catch (java.io.FileNotFoundException e) {
                     outputArea.appendText("\"" + fileName + "\" NOT FOUND");
@@ -183,83 +205,75 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
                     }
                 }
-        }
+            }
         
-        // Action for when save changes button is pressed
-        else if (event.getSource() == saveFileButton) {
-            try {
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(inputFileTest));
-                bufferedWriter.write(outputArea.getText());
-                bufferedWriter.flush();
-                bufferedWriter.close();
+            // Action for when preview processed file button is pressed
+            else if (event.getSource() == previewButton) {
                 outputArea.clear();
-                outputArea.appendText("SAVED TO \"" + fileName + "\"");
-                outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
-            }
-            catch (java.io.FileNotFoundException e) {
-                outputArea.appendText("\"" + fileName + "\" NOT FOUND");
-                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
-            }
-            catch (java.io.IOException e) {
-                outputArea.appendText("Cannot access file");
-                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
-            }
-            finally {
+                outputArea.setStyle("-fx-txt-inner-color: black");
+                
                 try {
-                   bufferedReader.close();
+                    int charCount = 0;
+                    int tempCount = 0;
+                    String text;
+                    Scanner scanner = new Scanner(f);
+                    Scanner read = new Scanner(f);
+
+                    while (scanner.hasNext()) {
+                        tempCount = scanner.next().length();
+                        if (charCount + tempCount <= 80 - 1) {
+                            charCount += tempCount;
+                            outputArea.appendText(read.next());
+                            outputArea.appendText(" ");
+                            charCount++;
+                        }
+                        else {
+                            int newCount = 80 - (charCount + tempCount);
+                            charCount = newCount;
+                            outputArea.appendText("\n");
+                        }
+                    }
+                    scanner.close();
+                    read.close();
+                }
+                catch (java.io.FileNotFoundException e) {
+                    outputArea.appendText("\"" + fileName + "\" NOT FOUND");
+                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
                 }
                 catch (java.io.IOException e) {
-                    outputArea.appendText("Cannot close file");
+                    outputArea.appendText("Cannot access file");
                     outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
                 }
             }
-        }
         
-        // Action for when preview processed file button is pressed
-        else if (event.getSource() == previewButton) {
-            outputArea.clear();
-            outputArea.setStyle("-fx-txt-inner-color: black");
-            File file = new File(inputFileTest);
-            try {
-                int charCount = 0;
-                int tempCount = 0;
-                String text;
-                Scanner scanner = new Scanner(file);
-                Scanner read = new Scanner(file);
-
-                while (scanner.hasNext()) {
-                    tempCount = scanner.next().length();
-                    if (charCount + tempCount <= 80 - 1) {
-                        charCount += tempCount;
-                        outputArea.appendText(read.next());
-                        outputArea.appendText(" ");
-                        charCount++;
-                    }
-                    else {
-                        int newCount = 80 - (charCount + tempCount);
-                        charCount = newCount;
-                        outputArea.appendText("\n");
-                    }
-                }
-                
-                scanner.close();
-                read.close();
-            }
-            catch (java.io.FileNotFoundException e) {
-                outputArea.appendText("\"" + fileName + "\" NOT FOUND");
-                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
-            }
-            catch (java.io.IOException e) {
-                outputArea.appendText("Cannot access file");
-                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
-            }
-        }
-        
-        // Action for when display error log button is pressed
-        else if (event.getSource() == errorsButton) {
+            // Action for when display error log button is pressed
+            else if (event.getSource() == errorsButton) {
             
-        }
+            }
 
+        }
+        
+        catch (java.io.FileNotFoundException e) {
+            outputArea.clear();
+            outputArea.appendText("\"" + fileName + "\" NOT FOUND");
+            outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+        }
+        
+        catch (java.io.IOException e) {
+            outputArea.clear();
+            outputArea.appendText("Cannot access file");
+            outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+        }
+        
+        finally {
+                try {
+                    bufferedReader.close();
+                }
+                catch (java.io.IOException e) {
+                    outputArea.clear();
+                    outputArea.appendText("Cannot close file");
+                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                }
+        }
     }
-    
 }
