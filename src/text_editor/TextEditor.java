@@ -12,8 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
-import javafx.scene.text.FontWeight;
-import javafx.stage.*;
 import javafx.stage.*;
 
 
@@ -174,7 +172,6 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         
             // Action for when save changes button is pressed
             else if (event.getSource() == saveFileButton) {
-                try {
                     if (f.exists()) {
                         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(inputFileTest));
                         bufferedWriter.write(outputArea.getText());
@@ -187,32 +184,14 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                     else {
                         throw new FileNotFoundException();
                     }
-                }
-                catch (java.io.FileNotFoundException e) {
-                    outputArea.appendText("\"" + fileName + "\" NOT FOUND");
-                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
-                }
-                catch (java.io.IOException e) {
-                    outputArea.appendText("Cannot access file");
-                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
-                }
-                finally {
-                    try {
-                        bufferedReader.close();
-                    }
-                    catch (java.io.IOException e) {
-                        outputArea.appendText("Cannot close file");
-                        outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
-                    }
-                }
-            }
-        
+             }
+                        
             // Action for when preview processed file button is pressed
             else if (event.getSource() == previewButton) {
                 outputArea.clear();
                 outputArea.setStyle("-fx-txt-inner-color: black");
                 
-                try {
+                if (f.exists()) {
                     int charCount = 0;
                     int tempCount = 0;
                     String text;
@@ -236,13 +215,8 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                     scanner.close();
                     read.close();
                 }
-                catch (java.io.FileNotFoundException e) {
-                    outputArea.appendText("\"" + fileName + "\" NOT FOUND");
-                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
-                }
-                catch (java.io.IOException e) {
-                    outputArea.appendText("Cannot access file");
-                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                else {
+                    throw new FileNotFoundException();
                 }
             }
         
