@@ -30,11 +30,11 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
     private Button errorsButton;
     private TextField openFileField;
     private TextArea outputArea;
-    
+   
     
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Text Editor");
+        primaryStage.setTitle("Text Editor"); 
         
         
         // Pane for containing openFileField
@@ -187,7 +187,32 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         
         // Action for when save changes button is pressed
         else if (event.getSource() == saveFileButton) {
-            
+            try {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(inputFileTest));
+                bufferedWriter.write(outputArea.getText());
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputArea.clear();
+                outputArea.appendText("SAVED TO \"" + fileName + "\"");
+                outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
+            }
+            catch (java.io.FileNotFoundException e) {
+                outputArea.appendText("\"" + fileName + "\" NOT FOUND");
+                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+            }
+            catch (java.io.IOException e) {
+                outputArea.appendText("Cannot access file");
+                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+            }
+            finally {
+                try {
+                   bufferedReader.close();
+                }
+                catch (java.io.IOException e) {
+                    outputArea.appendText("Cannot close file");
+                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                }
+            }
         }
         
         // Action for when preview processed file button is pressed
@@ -196,38 +221,37 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
             outputArea.setStyle("-fx-txt-inner-color: black");
             File file = new File(inputFileTest);
             try {
-                int charCount = 0, count = 0;
+                int charCount = 0;
+                int tempCount = 0;
                 String text;
                 Scanner scanner = new Scanner(file);
-                Scanner scanCount = new Scanner(file);
                 Scanner read = new Scanner(file);
 
-                
                 while (scanner.hasNext()) {
-                    if (charCount + scanner.next().length() <= 80) {
-                        charCount += scanCount.next().length() + 1;
+                    tempCount = scanner.next().length();
+                    if (charCount + tempCount <= 80 - 1) {
+                        charCount += tempCount;
                         outputArea.appendText(read.next());
                         outputArea.appendText(" ");
-                        count++;
+                        charCount++;
                     }
                     else {
-                        charCount = 0;
+                        int newCount = 80 - (charCount + tempCount);
+                        charCount = newCount;
                         outputArea.appendText("\n");
-                        count = 0;
                     }
                 }
                 
                 scanner.close();
-                scanCount.close();
                 read.close();
             }
             catch (java.io.FileNotFoundException e) {
-                  outputArea.appendText("\"" + fileName + "\" NOT FOUND");
-                  outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                outputArea.appendText("\"" + fileName + "\" NOT FOUND");
+                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
             }
             catch (java.io.IOException e) {
-                  outputArea.appendText("Cannot access file");
-                  outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                outputArea.appendText("Cannot access file");
+                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
             }
         }
         
@@ -235,6 +259,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         else if (event.getSource() == errorsButton) {
             
         }
+
     }
     
 }
