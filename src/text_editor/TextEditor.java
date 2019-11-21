@@ -194,7 +194,6 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                 if (f.exists()) {
                     int charCount = 0;
                     int tempCount = 0;
-                    String text;
                     Scanner scanner = new Scanner(f);
                     Scanner read = new Scanner(f);
 
