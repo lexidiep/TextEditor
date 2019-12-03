@@ -17,7 +17,7 @@ import javafx.stage.*;
 
 /**
  *
- * @authors Lexi Diep, Shivan Sareen
+ * @authors Lexi Diep, Shivan Sareen, Zachary Stryczek
  */
 
 
@@ -147,19 +147,21 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
     
     
         /*------------------------------------ACTION EVENTS-----------------------------------------------------------*/
+    File f = null;
+    String errorsString = "";
 
     @Override
     public void handle(ActionEvent event) {
         String fileName = openFileField.getText();
-        String inputFileTest = "/Users/lexidiep/Desktop/" + fileName;
+        String inputFileTest = "/Users/zacharystryczek/Desktop/" + fileName;
         BufferedReader bufferedReader = null;
 
         try {
-            bufferedReader = new BufferedReader(new FileReader(inputFileTest));
-            File f = new File(inputFileTest);
-            
             // Action for when process file button is pressed
             if (event.getSource() == loadFileButton) {
+                bufferedReader = new BufferedReader(new FileReader(inputFileTest));
+                f = new File(inputFileTest);
+
                 if (f.exists()) {
                     outputArea.clear();
                     outputArea.appendText("\"" + fileName + "\" HAS BEEN SUCCESSFULLY PROCESSED");
@@ -172,7 +174,11 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         
             // Action for when save changes button is pressed
             else if (event.getSource() == saveFileButton) {
-                    if (f.exists()) {
+                    if(f==null)
+                    {
+                        throw new FileNotFoundException();
+                    }
+                    else if (f.exists()) {
                         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(inputFileTest));
                         bufferedWriter.write(outputArea.getText());
                         bufferedWriter.flush();
@@ -190,8 +196,11 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
             else if (event.getSource() == previewButton) {
                 outputArea.clear();
                 outputArea.setStyle("-fx-txt-inner-color: black");
-                
-                if (f.exists()) {
+                if(f==null)
+                {
+                    throw new FileNotFoundException();
+                }
+                else if (f.exists()) {
                     int charCount = 0;
                     int tempCount = 0;
                     Scanner scanner = new Scanner(f);
@@ -221,7 +230,16 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         
             // Action for when display error log button is pressed
             else if (event.getSource() == errorsButton) {
-            
+                outputArea.clear();
+                outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+                if(errorsString == "")
+                {
+                    outputArea.appendText("No errors have been found.");
+                }
+                else
+                {
+                    outputArea.appendText(errorsString);
+                }
             }
 
         }
@@ -230,12 +248,15 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
             outputArea.clear();
             outputArea.appendText("\"" + fileName + "\" NOT FOUND");
             outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+            errorsString = errorsString + "Error: java.io.FileNotFoundException" + "\n";
+            f = null; //set to null until a valid input is processed
         }
         
         catch (java.io.IOException e) {
             outputArea.clear();
             outputArea.appendText("Cannot access file");
             outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
+            errorsString = errorsString + "Error: java.io.IOException" + "\n";
         }
         
         finally {
