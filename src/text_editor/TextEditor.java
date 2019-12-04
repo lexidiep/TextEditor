@@ -202,21 +202,21 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                 }
                 else if (f.exists()) {
                     int charCount = 0;
-                    int tempCount = 0;
                     Scanner scanner = new Scanner(f);
                     Scanner read = new Scanner(f);
 
                     while (scanner.hasNext()) {
-                        tempCount = scanner.next().length();
-                        if (charCount + tempCount <= 80 - 1) {
-                            charCount += tempCount;
+                        charCount += scanner.next().length();
+                        if (charCount <= 80) {
                             outputArea.appendText(read.next());
-                            outputArea.appendText(" ");
-                            charCount++;
+                            if(charCount != 80)
+                            {
+                                outputArea.appendText(" ");
+                                charCount++; //for the space
+                            }
                         }
                         else {
-                            int newCount = 80 - (charCount + tempCount);
-                            charCount = newCount;
+                            charCount = 0;
                             outputArea.appendText("\n");
                         }
                     }
