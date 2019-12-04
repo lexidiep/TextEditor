@@ -27,7 +27,9 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
     private Button previewButton;
     private Button errorsButton;
     private TextField openFileField;
+    private TextField saveToField;
     private TextArea outputArea;
+    // insets are (top, right, bottom, left)
    
     
     @Override
@@ -45,30 +47,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         fileFieldPane.getChildren().add(openFileField);
         
         
-        // Pane for containing save button
-        // button should be centered
-        saveFileButton = new Button("Save Changes");
-        saveFileButton.setOnAction(this);
-        saveFileButton.setPrefHeight(35);
-        saveFileButton.setTextFill(Color.WHITE);
-        BackgroundFill fill = new BackgroundFill(Color.CORNFLOWERBLUE, new CornerRadii(5), Insets.EMPTY);
-        Background saveBG = new Background(fill);
-        saveFileButton.setBackground(saveBG);
-        HBox savePane = new HBox();
-        savePane.setAlignment(Pos.CENTER);
-        savePane.setPadding(new Insets(0, 0, 4, 18));
-        savePane.getChildren().add(saveFileButton);
-        
-        
-        // Pane for containing loadPane and savePane
-        // both panes should be centered
-        VBox topMidPane = new VBox();
-        topMidPane.setAlignment(Pos.CENTER);
-        topMidPane.setPadding(new Insets(3, 3, 0, 70));
-        topMidPane.getChildren().addAll(fileFieldPane, savePane);
-        
-        
-        // Pane for containing the load file button to be aligned with open file field
+        // Pane for containing the load file button
         loadFileButton = new Button("Process File");
         loadFileButton.setOnAction(this);
         loadFileButton.setTextFill(Color.WHITE);
@@ -76,16 +55,61 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         Background loadBG = new Background(loadFill);
         loadFileButton.setBackground(loadBG);
         HBox loadPane = new HBox();
-        loadPane.setAlignment(Pos.TOP_LEFT);
-        loadPane.setPadding(new Insets(3, 0, 0, 0));;
+        loadPane.setAlignment(Pos.CENTER);
+        loadPane.setPadding(new Insets(0, 0, 3, 6));
         loadPane.getChildren().add(loadFileButton);
+        
+        
+        // Pane for containing the load file button to be aligned with open file field 
+        HBox processFilePane = new HBox();
+        processFilePane.setAlignment(Pos.CENTER);
+        processFilePane.setPadding(new Insets(0, 0, 4, 83));
+        processFilePane.getChildren().addAll(fileFieldPane, loadPane);
+        
+        
+        // saveToPanel should line up with save as button
+        saveToField = new TextField();
+        saveToField.setPrefWidth(250);
+        HBox saveToPane = new HBox();
+        saveToPane.setAlignment(Pos.CENTER);
+        saveToPane.setPadding(new Insets(0, 0, 3, 30));
+        saveToPane.getChildren().add(saveToField);
+        
+        
+        // Pane for containing save button
+        // button and text field should be centered
+        saveFileButton = new Button("Save As...");
+        saveFileButton.setOnAction(this);
+        saveFileButton.setTextFill(Color.WHITE);
+        BackgroundFill fill = new BackgroundFill(Color.CORNFLOWERBLUE, new CornerRadii(5), Insets.EMPTY);
+        Background saveBG = new Background(fill);
+        saveFileButton.setBackground(saveBG);
+        HBox savePane = new HBox();
+        savePane.setAlignment(Pos.CENTER);
+        savePane.setPadding(new Insets(0, 0, 4, 6));
+        savePane.getChildren().add(saveFileButton);
+        
+        
+        // Pane for both save components
+        HBox saveFilePane = new HBox();
+        saveFilePane.setAlignment(Pos.CENTER);
+        saveFilePane.setPadding(new Insets(0, 0, 4, 38));
+        saveFilePane.getChildren().addAll(saveToPane, savePane);
+        
+        
+        // Pane for containing loadPane and savePane
+        // both panes should be centered
+        VBox topMidPane = new VBox();
+        topMidPane.setAlignment(Pos.CENTER);
+        topMidPane.setPadding(new Insets(3, 3, 0, 0));
+        topMidPane.getChildren().addAll(processFilePane, saveFilePane);
         
         
         // Pane for top border of root pane
         HBox topPane = new HBox();
         topPane.setAlignment(Pos.CENTER);
-        topPane.getChildren().addAll(topMidPane, loadPane);
-        
+        topPane.getChildren().add(topMidPane);
+
         
         // Pane to enable scroll in text area
         outputArea = new TextArea();
@@ -152,19 +176,20 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
 
     @Override
     public void handle(ActionEvent event) {
-        String fileName = openFileField.getText();
-        String inputFileTest = "/Users/zacharystryczek/Desktop/" + fileName;
+        String inputPath = openFileField.getText();
+        String outputPath = saveToField.getText();
+        
         BufferedReader bufferedReader = null;
-
+ 
         try {
             // Action for when process file button is pressed
             if (event.getSource() == loadFileButton) {
-                bufferedReader = new BufferedReader(new FileReader(inputFileTest));
-                f = new File(inputFileTest);
+                bufferedReader = new BufferedReader(new FileReader(inputPath));
+                f = new File(inputPath);
 
                 if (f.exists()) {
                     outputArea.clear();
-                    outputArea.appendText("\"" + fileName + "\" HAS BEEN SUCCESSFULLY PROCESSED");
+                    outputArea.appendText("\"" + inputPath + "\" HAS BEEN SUCCESSFULLY PROCESSED");
                     outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
                 }
                 else {
@@ -179,12 +204,12 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         throw new FileNotFoundException();
                     }
                     else if (f.exists()) {
-                        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(inputFileTest));
+                        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputPath));
                         bufferedWriter.write(outputArea.getText());
                         bufferedWriter.flush();
                         bufferedWriter.close();
                         outputArea.clear();
-                        outputArea.appendText("SAVED TO \"" + fileName + "\"");
+                        outputArea.appendText("SAVED TO \"" + outputPath + "\"");
                         outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
                     }
                     else {
@@ -257,7 +282,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         
         catch (java.io.FileNotFoundException e) {
             outputArea.clear();
-            outputArea.appendText("\"" + fileName + "\" NOT FOUND");
+            outputArea.appendText("\"" + inputPath + "\" NOT FOUND");
             outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
             errorsString = errorsString + "Error: java.io.FileNotFoundException" + "\n";
             f = null; //set to null until a valid input is processed
