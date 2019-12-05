@@ -41,6 +41,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         // should be centered and will be contained with save button
         openFileField = new TextField();
         openFileField.setPrefWidth(250);
+        openFileField.setPromptText("Enter full directory path for input file");
         HBox fileFieldPane = new HBox();
         fileFieldPane.setAlignment(Pos.CENTER);
         fileFieldPane.setPadding(new Insets(0, 0, 3, 0));
@@ -70,6 +71,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         // saveToPanel should line up with save as button
         saveToField = new TextField();
         saveToField.setPrefWidth(250);
+        saveToField.setPromptText("Enter full directory path for file destination");
         HBox saveToPane = new HBox();
         saveToPane.setAlignment(Pos.CENTER);
         saveToPane.setPadding(new Insets(0, 0, 3, 30));
@@ -214,12 +216,60 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         }
                         if(theWord.contains("-d"))
                         {
-                            newLine = "\n\n";
+                            processedText+="\n";
+                            if(newLine == "\n" + "          ")
+                            {
+                                newLine = "\n\n" + "          ";
+                                processedText+="          ";
+                            }
+                            else
+                            {
+                                newLine = "\n\n";
+                            }
+                            theWord = scanner.next();
                         }
 
                         if(theWord.contains("-s"))
                         {
-                            newLine = "\n";
+                            processedText+="\n";
+                            if(newLine == "\n\n" + "          ")
+                            {
+                                newLine = "\n" + "          ";
+                                processedText+="          ";
+                            }
+                            else
+                            {
+                                newLine = "\n";
+                            }
+                            theWord = scanner.next();
+                        }
+                        if(theWord.contains("-b"))
+                        {
+                            processedText+="\n" + "          ";
+                            if(newLine == "\n\n")
+                            {
+                                newLine = "\n\n" + "          ";
+                            }
+                            else
+                            {
+                                newLine = "\n" + "          ";
+                            }
+                            
+                            theWord = scanner.next();
+                        }
+
+                        if(theWord.contains("-n"))
+                        {
+                            processedText+="\n";
+                            if(newLine == "\n\n" + "          ")
+                            {
+                                newLine = "\n\n";
+                            }
+                            else
+                            {
+                                newLine = "\n";
+                            }
+                            theWord = scanner.next();
                         }
 
 
@@ -276,7 +326,8 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                 outputArea.setStyle("-fx-txt-inner-color: black");
                 if(processedText == "")
                 {
-                    outputArea.appendText("Nothing has been processed");
+                    outputArea.setText("NO FILE HAS BEEN PROCESSED");
+                    outputArea.setStyle("-fx-text-inner-color: red; -fx-font-size: 20");
                 }
                 else
                 {
