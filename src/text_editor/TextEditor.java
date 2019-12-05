@@ -207,9 +207,11 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
 
                         if(theWord.contains("-i"))
                         {
-                            processedText += ("\n" + "     ");
-                            charCount = 5;
+                            processedText += ("     ");
+                            charCount += 5;
                             theWord = scanner.next();
+                            charCount += theWord.length();
+                            currentWordLength = theWord.length();
                         }
 
                         if(charCount <= 80) {
