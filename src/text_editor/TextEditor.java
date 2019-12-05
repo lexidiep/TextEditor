@@ -173,6 +173,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
         /*------------------------------------ACTION EVENTS-----------------------------------------------------------*/
     File f = null;
     String errorsString = "";
+    String processedText = "";
 
     @Override
     public void handle(ActionEvent event) {
@@ -191,6 +192,39 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                     outputArea.clear();
                     outputArea.appendText("\"" + inputPath + "\" HAS BEEN SUCCESSFULLY PROCESSED");
                     outputArea.setStyle("-fx-text-inner-color: green; -fx-font-size: 20");
+
+                    int charCount = 0;
+                    int currentWordLength = 0;
+                    Scanner scanner = new Scanner(f);
+                    Scanner read = new Scanner(f);
+                    String theWord;
+
+                    while (scanner.hasNext()) {
+                        theWord = scanner.next();
+                        charCount += theWord.length();
+                        currentWordLength = theWord.length();
+
+                        if(charCount <= 80) {
+                            if(charCount == 80)
+                            {
+                                processedText += (theWord + "\n");
+                                charCount = 0;
+                            }
+                            else
+                            {
+                                processedText += (theWord + " ");
+                                charCount++; //for the space
+                            }
+                            
+                        }
+                        else //charCount is greater than 80
+                        {
+                            processedText += ("\n" + theWord + " ");
+                            charCount = currentWordLength + 1;
+                        }
+                    }
+                    scanner.close();
+                    read.close();
                 }
                 else {
                     throw new FileNotFoundException();
@@ -221,46 +255,13 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
             else if (event.getSource() == previewButton) {
                 outputArea.clear();
                 outputArea.setStyle("-fx-txt-inner-color: black");
-                if(f==null)
+                if(processedText == "")
                 {
-                    throw new FileNotFoundException();
+                    outputArea.appendText("Nothing has been processed");
                 }
-                else if (f.exists()) {
-                    int charCount = 0;
-                    int currentWordLength = 0;
-                    Scanner scanner = new Scanner(f);
-                    Scanner read = new Scanner(f);
-                    String theWord;
-
-                    while (scanner.hasNext()) {
-                        theWord = scanner.next();
-                        charCount += theWord.length();
-                        currentWordLength = theWord.length();
-
-                        if(charCount <= 80) {
-                            if(charCount == 80)
-                            {
-                                outputArea.appendText(theWord + "\n");
-                                charCount = 0;
-                            }
-                            else
-                            {
-                                outputArea.appendText(theWord + " ");
-                                charCount++; //for the space
-                            }
-                            
-                        }
-                        else //charCount is greater than 80
-                        {
-                            outputArea.appendText("\n" + theWord + " ");
-                            charCount = currentWordLength + 1;
-                        }
-                    }
-                    scanner.close();
-                    read.close();
-                }
-                else {
-                    throw new FileNotFoundException();
+                else
+                {
+                    outputArea.appendText(processedText);
                 }
             }
         
