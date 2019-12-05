@@ -207,8 +207,9 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
 
                         if(theWord.contains("-i"))
                         {
-                            outputArea.appendText("\n" + "     ");
-                            charCount += 5;
+                            processedText += ("\n" + "     ");
+                            charCount = 5;
+                            theWord = scanner.next();
                         }
 
                         if(charCount <= 80) {
