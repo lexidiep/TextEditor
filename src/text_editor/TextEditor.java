@@ -198,6 +198,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                     Scanner scanner = new Scanner(f);
                     Scanner read = new Scanner(f);
                     String theWord;
+                    String newLine = "\n";
 
                     while (scanner.hasNext()) {
 
@@ -207,17 +208,25 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
 
                         if(theWord.contains("-i"))
                         {
-                            processedText += ("     ");
-                            charCount += 5;
+                            processedText += (newLine + "     ");
                             theWord = scanner.next();
-                            charCount += theWord.length();
-                            currentWordLength = theWord.length();
+                            charCount = 5 + theWord.length();
                         }
+                        if(theWord.contains("-d"))
+                        {
+                            newLine = "\n\n";
+                        }
+
+                        if(theWord.contains("-s"))
+                        {
+                            newLine = "\n";
+                        }
+
 
                         if(charCount <= 80) {
                             if(charCount == 80)
                             {
-                                processedText += (theWord + "\n");
+                                processedText += (theWord + newLine);
                                 charCount = 0;
                             }
                             else
@@ -229,7 +238,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         }
                         else //charCount is greater than 80
                         {
-                            processedText += ("\n" + theWord + " ");
+                            processedText += (newLine + theWord + " ");
                             charCount = currentWordLength + 1;
                         }
                     }
