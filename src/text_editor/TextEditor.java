@@ -272,6 +272,13 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             theWord = scanner.next();
                         }
 
+                        if(theWord.contains("-e"))
+                        {
+                            processedText += (newLine + newLine);
+                            theWord = scanner.next();
+                            charCount = theWord.length();
+                        }
+
 
                         if(charCount <= 80) {
                             if(charCount == 80)
