@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import java.util.Formatter;
 import javafx.stage.*;
 
 
@@ -208,30 +209,37 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         charCount += theWord.length();
                         currentWordLength = theWord.length();
 
+                        //indent
                         if(theWord.contains("-i"))
                         {
-                            processedText += (newLine + "     ");
+                            processedText += ("     ");
                             theWord = scanner.next();
                             charCount = 5 + theWord.length();
+                            currentWordLength = theWord.length();
                         }
+                        
+                        //double space
                         if(theWord.contains("-d"))
                         {
-                            processedText+="\n";
-                            if(newLine == "\n" + "          ")
+                            //processedText+="\n";
+                            if(newLine.equals("\n" + "          "))
                             {
                                 newLine = "\n\n" + "          ";
-                                processedText+="          ";
+                                processedText += "          ";
+                                charCount += 10;
                             }
                             else
                             {
                                 newLine = "\n\n";
                             }
                             theWord = scanner.next();
+                            charCount += theWord.length();
+                            currentWordLength = theWord.length();
                         }
 
+                        //single space (default)
                         if(theWord.contains("-s"))
                         {
-                            processedText+="\n";
                             if(newLine == "\n\n" + "          ")
                             {
                                 newLine = "\n" + "          ";
@@ -243,9 +251,12 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             }
                             theWord = scanner.next();
                         }
+                        
+                        //block indent
                         if(theWord.contains("-b"))
                         {
-                            processedText+="\n" + "          ";
+                            processedText += newLine + "          ";
+                            charCount = 10;
                             if(newLine == "\n\n")
                             {
                                 newLine = "\n\n" + "          ";
@@ -256,11 +267,14 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             }
                             
                             theWord = scanner.next();
+                            charCount += theWord.length();
+                            currentWordLength = theWord.length();
                         }
 
+                        //remove indent
                         if(theWord.contains("-n"))
                         {
-                            processedText+="\n";
+                            processedText += "\n";
                             if(newLine == "\n\n" + "          ")
                             {
                                 newLine = "\n\n";
@@ -270,16 +284,27 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                                 newLine = "\n";
                             }
                             theWord = scanner.next();
+                            charCount = theWord.length();
                         }
 
+                        //blank line
                         if(theWord.contains("-e"))
                         {
                             processedText += (newLine + newLine);
                             theWord = scanner.next();
                             charCount = theWord.length();
                         }
+                        
+                        //left justified (default)
+                        if (theWord.contains("-l"))
+                        {
+                            processedText += (newLine);
+                            theWord = scanner.next();
+                            charCount = theWord.length();
+                        }
 
 
+                        //each line containg and including up to 80 characters
                         if(charCount <= 80) {
                             if(charCount == 80)
                             {
