@@ -199,7 +199,6 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                     int charCount = 0;
                     int currentWordLength = 0;
                     Scanner scanner = new Scanner(f);
-                    Scanner read = new Scanner(f);
                     String theWord;
                     String newLine = "\n";
 
@@ -302,7 +301,37 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             theWord = scanner.next();
                             charCount = theWord.length();
                         }
+                                                                        
+                        //title
+                        if (theWord.contains("-t")) {
+                            String title = "";
+                            title = scanner.next(); //consumes newline character and grabs first word of title
+                            title += scanner.nextLine();    //grabs the rest of the title
+                            
+                            int spaces = (80 - title.length());
+                            if (spaces % 2 == 0)
+                            {
+                                for (int i = 0; i < (spaces/2); i++)
+                                {
+                                  processedText += " ";
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < (spaces/2) + 1; i++)
+                                {
+                                  processedText += " ";
+                                }
+                            }
 
+                            processedText += title;
+                            for (int i = 0; i < (spaces/2); i++)
+                            {
+                                processedText += " ";
+                            }
+                            processedText += "\n";
+                            theWord = scanner.next();
+                        }
                         
                         //1 column
                         if (theWord.contains("-1"))
@@ -312,6 +341,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             charCount = theWord.length();
                         }
 
+                        
                         if(charCount <= 80) {
                             if(charCount == 80)
                             {
@@ -332,7 +362,6 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         }
                     }
                     scanner.close();
-                    read.close();
                 }
                 else {
                     throw new FileNotFoundException();
