@@ -254,21 +254,22 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         }
                         if(theWord.contains("-b"))
                         {
+                            indentLength = 10;
                             processedText+="\n" + "          ";
                             if(newLine == "\n\n")
                             {
                                 newLine = "\n\n" + "          ";
                                 theWord = scanner.next();
-                                charCount = theWord.length();
+                                charCount = theWord.length() + indentLength;
                             }
                             else
                             {
                                 newLine = "\n" + "          ";
                                 theWord = scanner.next();
-                                charCount = theWord.length();
+                                charCount = theWord.length() + indentLength;
                             }
                             
-                            indentLength = 10;
+                            
                         }
 
                         if(theWord.contains("-n"))
@@ -305,8 +306,8 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             charCount = theWord.length();
                         }
 
-                        if(charCount + indentLength <= 80) {
-                            if(charCount + indentLength == 80)
+                        if(charCount <= 80) {
+                            if(charCount == 80)
                             {
                                 processedText += (theWord + newLine);
                                 charCount = 0 + indentLength;
