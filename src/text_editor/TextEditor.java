@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
-import java.util.Formatter;
 import javafx.stage.*;
 
 
@@ -177,6 +176,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
     File f = null;
     String errorsString = "";
     String processedText = "";
+    int indentLength = 0;
 
     @Override
     public void handle(ActionEvent event) {
@@ -209,92 +209,94 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         charCount += theWord.length();
                         currentWordLength = theWord.length();
 
-                        //indent
                         if(theWord.contains("-i"))
                         {
-                            processedText += ("     ");
+                            processedText += (newLine + "     ");
                             theWord = scanner.next();
                             charCount = 5 + theWord.length();
-                            currentWordLength = theWord.length();
                         }
-                        
-                        //double space
                         if(theWord.contains("-d"))
                         {
-                            //processedText+="\n";
-                            if(newLine.equals("\n" + "          "))
+                            processedText+="\n";
+                            if(newLine == "\n" + "          ")
                             {
                                 newLine = "\n\n" + "          ";
-                                processedText += "          ";
-                                charCount += 10;
+                                processedText+="          ";
+                                theWord = scanner.next();
+                                charCount = theWord.length();
                             }
                             else
                             {
                                 newLine = "\n\n";
+                                theWord = scanner.next();
+                                charCount = theWord.length();
                             }
-                            theWord = scanner.next();
-                            charCount += theWord.length();
-                            currentWordLength = theWord.length();
+                            
                         }
 
-                        //single space (default)
                         if(theWord.contains("-s"))
                         {
+                            processedText+="\n";
                             if(newLine == "\n\n" + "          ")
                             {
                                 newLine = "\n" + "          ";
                                 processedText+="          ";
+                                theWord = scanner.next();
+                                charCount = theWord.length();
                             }
                             else
                             {
                                 newLine = "\n";
+                                theWord = scanner.next();
+                                charCount = theWord.length();
                             }
-                            theWord = scanner.next();
+                            
                         }
-                        
-                        //block indent
                         if(theWord.contains("-b"))
                         {
-                            processedText += newLine + "          ";
-                            charCount = 10;
+                            processedText+="\n" + "          ";
                             if(newLine == "\n\n")
                             {
                                 newLine = "\n\n" + "          ";
+                                theWord = scanner.next();
+                                charCount = theWord.length();
                             }
                             else
                             {
                                 newLine = "\n" + "          ";
+                                theWord = scanner.next();
+                                charCount = theWord.length();
                             }
                             
-                            theWord = scanner.next();
-                            charCount += theWord.length();
-                            currentWordLength = theWord.length();
+                            indentLength = 10;
                         }
 
-                        //remove indent
                         if(theWord.contains("-n"))
                         {
-                            processedText += "\n";
+                            processedText+="\n";
                             if(newLine == "\n\n" + "          ")
                             {
                                 newLine = "\n\n";
+                                theWord = scanner.next();
+                                charCount = theWord.length();
                             }
                             else
                             {
                                 newLine = "\n";
+                                theWord = scanner.next();
+                                charCount = theWord.length();
                             }
-                            theWord = scanner.next();
-                            charCount = theWord.length();
+                            indentLength = 0;
+                           
                         }
 
-                        //blank line
                         if(theWord.contains("-e"))
                         {
                             processedText += (newLine + newLine);
                             theWord = scanner.next();
                             charCount = theWord.length();
                         }
-                        
+
                         //left justified (default)
                         if (theWord.contains("-l"))
                         {
@@ -303,13 +305,11 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             charCount = theWord.length();
                         }
 
-
-                        //each line containg and including up to 80 characters
-                        if(charCount <= 80) {
-                            if(charCount == 80)
+                        if(charCount + indentLength <= 80) {
+                            if(charCount + indentLength == 80)
                             {
                                 processedText += (theWord + newLine);
-                                charCount = 0;
+                                charCount = 0 + indentLength;
                             }
                             else
                             {
@@ -321,7 +321,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         else //charCount is greater than 80
                         {
                             processedText += (newLine + theWord + " ");
-                            charCount = currentWordLength + 1;
+                            charCount = currentWordLength + 1 + indentLength;
                         }
                     }
                     scanner.close();
