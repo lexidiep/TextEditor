@@ -211,7 +211,6 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
 
                         //title
                         if (theWord.contains("-t")) {
-                            processedText += newLine;
                             String title = "";
                             title = scanner.next();
                             title += " " + scanner.nextLine();
@@ -237,7 +236,6 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             {
                                 processedText += " ";
                             }
-                            processedText += newLine;
                             theWord = scanner.next();
                             charCount = theWord.length();
                         }
