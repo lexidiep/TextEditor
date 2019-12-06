@@ -220,7 +220,7 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             if(newLine == "\n" + "          ")
                             {
                                 newLine = "\n\n" + "          ";
-                                processedText+="          ";
+                                //processedText+="          ";
                             }
                             else
                             {
@@ -232,11 +232,11 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
 
                         if(theWord.contains("-s"))
                         {
-                            processedText+="\n";
+                            //processedText+="\n";
                             if(newLine == "\n\n" + "          ")
                             {
                                 newLine = "\n" + "          ";
-                                processedText+="          ";
+                                //processedText+="          ";
                                 theWord = scanner.next();
                                 charCount = theWord.length();
                             }
@@ -304,9 +304,12 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                                                                         
                         //title
                         if (theWord.contains("-t")) {
+                            processedText += newLine;
                             String title = "";
-                            title = scanner.next(); //consumes newline character and grabs first word of title
-                            title += scanner.nextLine();    //grabs the rest of the title
+                            title = scanner.next();
+                            title += " " + scanner.nextLine();
+                            
+                           
                             
                             int spaces = (80 - title.length());
                             if (spaces % 2 == 0)
@@ -329,8 +332,9 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             {
                                 processedText += " ";
                             }
-                            processedText += "\n";
+                            processedText += newLine;
                             theWord = scanner.next();
+                            charCount = theWord.length();
                         }
                         
                         //1 column
