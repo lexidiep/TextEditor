@@ -217,21 +217,18 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         }
                         if(theWord.contains("-d"))
                         {
-                            processedText+="\n";
+                            //processedText+="\n";
                             if(newLine == "\n" + "          ")
                             {
                                 newLine = "\n\n" + "          ";
                                 processedText+="          ";
-                                theWord = scanner.next();
-                                charCount = theWord.length();
                             }
                             else
                             {
                                 newLine = "\n\n";
-                                theWord = scanner.next();
-                                charCount = theWord.length();
                             }
-                            
+                            theWord = scanner.next();
+                            charCount += theWord.length();
                         }
 
                         if(theWord.contains("-s"))
@@ -300,6 +297,15 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
 
                         //left justified (default)
                         if (theWord.contains("-l"))
+                        {
+                            processedText += (newLine);
+                            theWord = scanner.next();
+                            charCount = theWord.length();
+                        }
+
+                        
+                        //1 column
+                        if (theWord.contains("-1"))
                         {
                             processedText += (newLine);
                             theWord = scanner.next();
