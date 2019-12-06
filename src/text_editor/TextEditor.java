@@ -208,6 +208,40 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                         charCount += theWord.length();
                         currentWordLength = theWord.length();
 
+
+                        //title
+                        if (theWord.contains("-t")) {
+                            processedText += newLine;
+                            String title = "";
+                            title = scanner.next();
+                            title += " " + scanner.nextLine();
+                            
+                            int spaces = (80 - title.length());
+                            if (spaces % 2 == 0)
+                            {
+                                for (int i = 0; i < (spaces/2); i++)
+                                {
+                                  processedText += " ";
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < (spaces/2) + 1; i++)
+                                {
+                                  processedText += " ";
+                                }
+                            }
+
+                            processedText += title;
+                            for (int i = 0; i < (spaces/2); i++)
+                            {
+                                processedText += " ";
+                            }
+                            processedText += newLine;
+                            theWord = scanner.next();
+                            charCount = theWord.length();
+                        }
+                        
                         if(theWord.contains("-i"))
                         {
                             processedText += (newLine + "     ");
@@ -302,40 +336,6 @@ public class TextEditor extends Application implements EventHandler<ActionEvent>
                             charCount = theWord.length();
                         }
                                                                         
-                        //title
-                        if (theWord.contains("-t")) {
-                            processedText += newLine;
-                            String title = "";
-                            title = scanner.next();
-                            title += " " + scanner.nextLine();
-                            
-                           
-                            
-                            int spaces = (80 - title.length());
-                            if (spaces % 2 == 0)
-                            {
-                                for (int i = 0; i < (spaces/2); i++)
-                                {
-                                  processedText += " ";
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 0; i < (spaces/2) + 1; i++)
-                                {
-                                  processedText += " ";
-                                }
-                            }
-
-                            processedText += title;
-                            for (int i = 0; i < (spaces/2); i++)
-                            {
-                                processedText += " ";
-                            }
-                            processedText += newLine;
-                            theWord = scanner.next();
-                            charCount = theWord.length();
-                        }
                         
                         //1 column
                         if (theWord.contains("-1"))
